@@ -67,7 +67,7 @@ main() {
 
 ```
 fact(x)
-  if x < 1 x;
+  if x < 1 1;
   else x*fact(x-1);
 ```
 Also, you actually don't have to put a "return" statement if expression is at the end of function/block.
@@ -76,7 +76,7 @@ Also, you actually don't have to put a "return" statement if expression is at th
 ```
 global main // Now le symbol "main" avaliable for an external object (e.g. crt1 - A thing your program wouldn't start that easily without)
 // No semicolon needed
-main(argc, argv)!
+main(argc, argv)
   ...
 ```
 ***
@@ -85,7 +85,7 @@ No, they aren't the same as globals but more like globals().
 ```
 glblInt; // Semicolon is required here; as I said above, they aren't the same as globals.
 glblArr[69]; // 69 computer words, not bytes.
-ayota()! (glblInt = glblInt + 1) - 1;
+ayota() (glblInt = glblInt + 1) - 1;
 ```
 All global variables are zero-initialized btw.
 ***
@@ -99,12 +99,12 @@ extern printf // Now le symbol "printf" avaliable for our object (Only if you ar
 ```shell
 $ cc -o kivaa kivaa.c
 $ ./kivaa bootstrap/kiva.ir kivac
-$ ./kiva kivac.k kivac
-$ ./kiva kivac.k kivac
-$ ./kiva kivac.k kivac
-$ ./kiva kivac.k kivac
-$ ./kiva kivac.k kivac
-$ ./kiva kivac.k kivac
-$ ./kiva kivac.k kivac
+$ ./kiva kiva.k kivac
+$ ./kiva kiva.k kivac
+$ ./kiva kiva.k kivac
+$ ./kiva kiva.k kivac
+$ ./kiva kiva.k kivac
+$ ./kiva kiva.k kivac
+$ ./kiva kiva.k kivac
 ... Now you can recompile the compiler over and over again
 ```
