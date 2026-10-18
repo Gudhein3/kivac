@@ -62,6 +62,7 @@ variables; /* variable[0] - frame_offset;
               variable[1]..variable[4] - name (ascii);
            */
 varcnt;
+funcs; /* each element (128 bytes) is a function name, copied from tokenstring */
 
 activecharacter;
 stream[128];
@@ -629,8 +630,11 @@ lprimary() {
     if tk == TOKID {
         auto i;
         auto found;
+        auto j;
+        auto isfn;
         i = 0;
         found = 0;
+        isfn = 0;
         while i < *(variables+8) {
             if strcmp(&tokenstring, daGet(variables, i)+8) == 0 {
                 emits("\txfp");
@@ -645,10 +649,23 @@ lprimary() {
             emits("\txst");
             emits(&tokenstring);
             emits("\n");
+            /* A known function: its address is already the value (no drf).
+               Checked before lex() so tokenstring still holds the name. */
+            j = 0;
+            while j < *(funcs+8) {
+                if strcmp(&tokenstring, daGet(funcs, j)) == 0 {
+                    isfn = 1;
+                    break;
+                }
+                j = j + 1;
+            }
         }
         lex();
         if found {
             return 2;
+        }
+        if isfn {
+            return 3;
         }
         return 1;
     } else if tk == TOKASTER {
@@ -789,6 +806,9 @@ p6(fl) {
 
     if tk == TOKLPAR {
         lex();
+        if islexpr == 2 { // callee is a local slot: load the pointer it holds
+            emits("\tdrf\n");
+        }
         emits("\tsv2\n");
         emits("\tm20\n");
         auto argc;
@@ -860,7 +880,9 @@ p6(fl) {
 
 
     tk = peek();
-    if islexpr { // We need to get value from a lexpr
+    /* stat 3 (function) is already a value: its address. Note: `||` is not
+       implemented in Kiva and `|` binds tighter than `==` — parens required. */
+    if (islexpr == 1) | (islexpr == 2) { // We need to get value from a lexpr
         emits("\tdrf\n"); // ; Lexpr deref\n");
     }
     0;
@@ -1351,6 +1373,11 @@ top()
                 expect(TOKSEMI);
                 emits("\n");
             } else {
+                /* Register the function name before parsing its body,
+                   so recursive references see it too. */
+                auto fnslot;
+                fnslot = daPush(funcs, 0);
+                memcpy(fnslot, &tokenstring, 128);
                 emits("prc");
                 emits(&tokenstring);
                 emits("\n");
@@ -1507,6 +1534,7 @@ main(argc, argv) {
     TOKKWAUTO = 57;
 
     variables = daCo(40);
+    funcs = daCo(128);
 
     if argc <3 {
         usage(argv[0]);
