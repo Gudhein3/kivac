@@ -4,7 +4,11 @@ extern nanosleep
 bufa[64]; // 64words and 64coloumns per each row(word)
 bufb[64];
 
-countNbrs(buf, row, col) l, r, u, d {
+countNbrs(buf, row, col) {
+    auto l;
+    auto r;
+    auto u;
+    auto d;
     //printf("%02d/%02d \n", row, col);
     l = (col - 1 + 64) % 64;
     r = (col + 1 + 64) % 64;
@@ -24,7 +28,13 @@ countNbrs(buf, row, col) l, r, u, d {
 sleepy[2];
 
 global main
-main() actbuf, pasbuf, xbuf, row, col, nbors {
+main() {
+    auto actbuf;
+    auto pasbuf;
+    auto xbuf;
+    auto row;
+    auto col;
+    auto nbors;
     actbuf = &bufa;
     pasbuf = &bufb;
     actbuf[0] = 0x4000400000000000;

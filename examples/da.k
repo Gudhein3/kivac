@@ -16,7 +16,8 @@ extern free
    }                      // 32
 */
 
-daCo(itsz) ptr {
+daCo(itsz) {
+    auto ptr;
     ptr = malloc(32);
     *ptr = malloc(itsz*256);
     *(ptr+8) = 0;
@@ -25,7 +26,7 @@ daCo(itsz) ptr {
     ptr;
 }
 
-daPush(da, it)! {
+daPush(da, it) {
     if *(da+8) + 1 >= *(da+16) {
         *(da+16) = *(da+16)*2;
         *da = realloc(*da, *(da+16)**(da+24));
@@ -34,19 +35,22 @@ daPush(da, it)! {
     *(da+8) = *(da+8) + 1;
 }
 
-daGet(da, idx)!
+daGet(da, idx)
     if idx >= *(da+8) {
         fprintf(stderr, "Tried to access too big index: %zu >= %zu\n", idx, *(da+8));
         abort();
     } else *da+idx**(da+24);
 
-daDe(da)! {
+daDe(da) {
     free(*da);
     free(da);
 }
 
 global main
-main() da, it, num {
+main() {
+    auto da;
+    auto it;
+    auto num;
     da = daCo(8);
     it = 0;
     while it < 300 {

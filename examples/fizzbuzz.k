@@ -1,7 +1,8 @@
 extern printf
 
 global main
-main() i {
+main() {
+    auto i;
     i = 1;
     while i <= 100 {
         if i % 15 == 0

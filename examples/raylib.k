@@ -8,12 +8,14 @@ extern GetMouseY
 extern DrawLine
 extern printf
 
-fib(x)!
+fib(x)
     if x<=1 x;
     else fib(x-1)+fib(x-2);
 
 global main
-main() msx, msy {
+main() {
+    auto msx;
+    auto msy;
     printf("%d\n", fib(8));
     InitWindow(640, 480, "Hello from SB");
     while !WindowShouldClose() {
