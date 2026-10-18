@@ -399,6 +399,10 @@ lex() {
         c = cnextr();
         i = 0;
         while (c = cpeek()) != '"' {
+            if i > 126 { // tokenstring[128] minus terminator
+                fprintf(stderr, "Bad code: string literal is too long at %d,%d\n", tokenrow+1, tokencol+1);
+                exit(1);
+            }
             c = cpeek();
             if c == '\\' {
                 c = parseEscapeCode();
@@ -429,7 +433,7 @@ lex() {
         tokenkind = TOKID;
         i = 0;
         while isalnum(c) | (c == '_') {
-            if i > 1024 { // NOTE: Hardcoded
+            if i > 126 { // tokenstring[128] minus terminator
                 fprintf(stderr, "Bad code: name is too long at %d,%d\n", tokenrow+1, tokencol+1);
                 exit(1);
             }
@@ -538,7 +542,7 @@ emit_mode;
 emit_dynarray;
 // XXX: Very dirty code, it should be betterized
 
-emit_textbuf[6];
+emit_textbuf[32];
 
 emit(x)
     if emit_mode == 0
@@ -1281,7 +1285,7 @@ stmt() {
         auto variable;
         variable = daPush(variables, 0);
         *(variables+8)++;
-        memcpy(variable+8, &tokenstring, 64);
+        memcpy(variable+8, &tokenstring, 128);
         frameshift = frameshift + 8;
         *variable = frameshift;
         lex();
@@ -1395,7 +1399,7 @@ top()
                     variable = daPush(variables, 0);
                     *(variables+8)++;
                     lexpect(TOKID);
-                    memcpy(variable+8, &tokenstring, 64);
+                    memcpy(variable+8, &tokenstring, 128);
                     lex();
                     frameshift = frameshift + 8;
                     *variable = frameshift;
@@ -1411,31 +1415,6 @@ top()
                     lex();
                 }
                 expect(TOKRPAR);
-                // tk = peek();
-                // if tk == TOKEXCL lex();
-                // else
-                //     while 1 {
-                //
-                //         /* TBD: Optimize that parsing thingy
-                //            TODOOO: Avoid overflows */
-                //         variable = daPush(variables, 0);
-                //         *(variables+8)++;
-                //
-                //         if tk != TOKID {
-                //             fprintf(stderr, "Expected token ID at %d,%d but got 'XXX'(%d)\n", tokenrow+1, tokencol+1, tk);
-                //             exit(1);
-                //         }
-                //         memcpy(variable+8, &tokenstring, 64);
-                //         frameshift = frameshift + 8;
-                //         *variable = frameshift;
-                //         lex();
-                //
-                //         if peek() != TOKCOMMA {
-                //             break;
-                //         }
-                //         lex();
-                //         tk = peek();
-                //     }
 
 
                 auto old_emit_mode;
@@ -1533,7 +1512,7 @@ main(argc, argv) {
     TOKKWFOR = 56;
     TOKKWAUTO = 57;
 
-    variables = daCo(40);
+    variables = daCo(136); /* 8-byte frame offset + 128-byte name */
     funcs = daCo(128);
 
     if argc <3 {
