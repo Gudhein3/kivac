@@ -1,5 +1,5 @@
-extern printf
-extern nanosleep
+extern printf()
+extern nanosleep()
 
 bufa[64]; // 64words and 64coloumns per each row(word)
 bufb[64];

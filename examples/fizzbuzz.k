@@ -1,4 +1,4 @@
-extern printf
+extern printf()
 
 global main
 main() {

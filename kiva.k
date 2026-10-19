@@ -1,32 +1,52 @@
-extern memcpy
-extern fread
-extern fwrite
-extern printf
-extern fprintf
-extern stderr
-extern isspace
-extern isdigit
-extern isxdigit
-extern isalpha
-extern isalnum
-extern exit
-extern strcmp
-extern fopen
-extern strerror
-extern perror
-extern fclose
-extern fork
-extern execvp
-extern waitpid
-extern memmove
-extern strlen
-extern abort
-extern malloc
-extern realloc
-extern memcpy
-extern memset
-extern free
-extern sprintf
+extern memcpy()
+extern fread()
+extern fwrite()
+extern printf()
+extern fprintf()
+extern stderr;
+extern isspace()
+extern isdigit()
+extern isxdigit()
+extern isalpha()
+extern isalnum()
+extern exit()
+extern strcmp()
+extern fopen()
+extern strerror()
+extern perror()
+extern fclose()
+extern fork()
+extern execvp()
+extern waitpid()
+extern memmove()
+extern strlen()
+extern abort()
+extern malloc()
+extern realloc()
+extern memset()
+extern free()
+extern sprintf()
+extern __errno_location()
+
+// Forward definitions
+extern cpeek()
+extern cnext()
+extern cnextr()
+extern tokenrow;
+extern tokencol;
+extern tokenkind;
+extern currentrow;
+extern currentcol;
+extern tokenstring[]
+extern strbufsz;
+extern strbuf[]
+extern emit_textbuf;
+extern stream[]
+extern parseEscapeCode()
+extern p6()
+extern expr()
+extern stmt()
+extern frameshift;
 
 
 daCo(itsz) {
@@ -57,6 +77,16 @@ daDe(da) {
     free(da);
 }
 
+GLSYM_ARRAY;
+GLSYM_FUNCTION;
+GLSYM_WORD;
+
+// Global symbols
+/*
+    glsym[0] - type;
+    glsym[1]..glsym[4] - name(ascii);
+*/
+glsyms;
 
 variables; /* variable[0] - frame_offset;
               variable[1]..variable[4] - name (ascii);
@@ -568,7 +598,7 @@ emitd(x)
 continueaddress;
 breakaddress;
 addrcounter;
-strbuf[1024];
+strbuf[16384];
 strbufsz;
 ra[6];
 
@@ -628,33 +658,48 @@ lprimary() {
     // emits("; lexpr()\n");
     if tk == TOKID {
         auto i;
-        auto found;
         i = 0;
-        found = 0;
         while i < *(variables+8) {
             if strcmp(&tokenstring, daGet(variables, i)+8) == 0 {
                 emits("\txfp");
                 emitd(*daGet(variables, i));
                 emits("\n");
-                found = 1;
-                break;
+                lex();
+                return 2;
             }
             i = i + 1;
         }
-        if !found {
-            emits("\txst");
-            emits(&tokenstring);
-            emits("\n");
+        // Okay, now we are searching in the global symbol array.
+        for i = 0  i < *(glsyms+8)  i = i + 1 {
+            if strcmp(&tokenstring, daGet(glsyms, i)+8) == 0 {
+                // printf("%s = %s %d:%d!\n", &tokenstring, daGet(glsyms, i)+8, tokenrow+1, tokencol+1);
+                auto kind;
+                kind = *daGet(glsyms, i);
+                emits("\txst");
+                emits(&tokenstring);
+                emits("\n");
+                lex();
+                if kind == GLSYM_ARRAY {
+                    return 1;
+                }
+                else if kind == GLSYM_FUNCTION {
+                    return 1;
+                }
+                else if kind == GLSYM_WORD {
+                    return 2;
+                }
+                else {
+                    fprintf(stderr, "Unreachable1 at lprimary: %d,%d\n", tokenrow+1, tokencol+1);
+                    exit(1);
+                }
+            }
         }
-        lex();
-        if found {
-            return 2;
-        }
-        return 1;
+        fprintf(stderr, "Failed to find symbol '%s' at %d,%d\n", &tokenstring, tokenrow+1, tokencol+1);
+        exit(1);
     } else if tk == TOKASTER {
         lex();
         p6(1);
-        return 1;
+        return 2;
     } else return 0;
 }
 
@@ -788,6 +833,9 @@ p6(fl) {
     tk = peek();
 
     if tk == TOKLPAR {
+        if islexpr != 1 {
+            emits("\tdrf\n");
+        }
         lex();
         emits("\tsv2\n");
         emits("\tm20\n");
@@ -860,7 +908,7 @@ p6(fl) {
 
 
     tk = peek();
-    if islexpr { // We need to get value from a lexpr
+    if islexpr == 2 { // We need to get value from a lexpr if the lexpr is not a function, or an array
         emits("\tdrf\n"); // ; Lexpr deref\n");
     }
     0;
@@ -1198,6 +1246,7 @@ stmt() {
     } else if tk == TOKKWFOR {
         auto addr;
         auto addr1;
+        auto addr2;
         auto prev_continue_address;
         auto prev_break_address;
         lex();
@@ -1205,12 +1254,13 @@ stmt() {
 
         prev_continue_address = continueaddress;
         prev_break_address = breakaddress;
-        continueaddress = addr = addrcounter;
+        continueaddress = addr2 = addrcounter + 2;
         breakaddress = addr1 = addrcounter + 1;
-        addrcounter = addrcounter + 2;
+        addr = addrcounter;
+        addrcounter = addrcounter + 3;
         emits("loc");
         emitd(addr);
-        emits("\n"); // ; for continue\n");
+        emits("\n"); // ; for iter
         expr(); // cond
 
         auto old_emit_mode;
@@ -1235,6 +1285,9 @@ stmt() {
         emitd(addr1);
         emit('\n');
         stmt();
+        emits("loc");
+        emitd(addr2);
+        emits("\n"); // ; for continue
         emits(*new_emit_dynarray);
         daDe(new_emit_dynarray);
         emits("ljp");
@@ -1242,7 +1295,7 @@ stmt() {
         emit('\n');
         emits("loc");
         emitd(addr1);
-        emits("\n"); // ; for break\n");
+        emits("\n"); // ; for break
         continueaddress = prev_continue_address;
         breakaddress = prev_break_address;
         return 0;
@@ -1331,7 +1384,28 @@ top()
             lexpect(TOKID);
             emits(&tokenstring);
             emit('\n');
+            auto glsym;
+            glsym = daPush(glsyms, 0);
+            memcpy(glsym + 8, &tokenstring, 32);
             lex();
+            if tokenkind == TOKLPAR {
+                *glsym = GLSYM_FUNCTION;
+                lex();
+                expect(TOKRPAR);
+            }
+            else if tokenkind == TOKLBRACK {
+                *glsym = GLSYM_ARRAY;
+                lex();
+                expect(TOKRBRACK);
+            }
+            else if tokenkind == TOKSEMI {
+                *glsym = GLSYM_WORD;
+                lex();
+            }
+            else {
+                fprintf(stderr, "Expected '(', '[', or ';' after SYMBOL after 'extern', got TOKEN(%d) at %d:%d\n", tokenkind, tokenrow+1, tokencol+1);
+                exit(1);
+            }
         } else if tk == TOKID {
             lex();
             tk = peek();
@@ -1339,9 +1413,17 @@ top()
                 emits("rsw1*");
                 emits(&tokenstring);
                 emits("\n");
+                auto glsym;
+                glsym = daPush(glsyms, 0);
+                *glsym = GLSYM_WORD;
+                memcpy(glsym + 8, &tokenstring, 32);
                 lex();
             } else if tk == TOKLBRACK {
                 lex();
+                auto glsym;
+                glsym = daPush(glsyms, 0);
+                *glsym = GLSYM_ARRAY;
+                memcpy(glsym + 8, &tokenstring, 32);
                 emits("rsw");
                 emitd(tokenu64);
                 emits("*");
@@ -1354,6 +1436,10 @@ top()
                 emits("prc");
                 emits(&tokenstring);
                 emits("\n");
+                auto glsym;
+                glsym = daPush(glsyms, 0);
+                *glsym = GLSYM_FUNCTION;
+                memcpy(glsym + 8, &tokenstring, 32);
                 expect(TOKLPAR);
                 addrcounter = 0;
                 frameshift = 0;
@@ -1448,6 +1534,11 @@ usage(progname) fprintf(stderr, "Usage: %s [-pp] input-code output-ir\n", progna
 
 global main
 main(argc, argv) {
+    GLSYM_ARRAY = 0;
+    GLSYM_FUNCTION = 1;
+    GLSYM_WORD = 2;
+    glsyms = daCo(40);
+
     TOKNUM = 1;
     TOKSTR = 2;
     TOKCHAR = 3;

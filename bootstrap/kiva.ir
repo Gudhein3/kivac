@@ -23,10 +23,28 @@ extstrlen
 extabort
 extmalloc
 extrealloc
-extmemcpy
 extmemset
 extfree
 extsprintf
+ext__errno_location
+extcpeek
+extcnext
+extcnextr
+exttokenrow
+exttokencol
+exttokenkind
+extcurrentrow
+extcurrentcol
+exttokenstring
+extstrbufsz
+extstrbuf
+extemit_textbuf
+extstream
+extparseEscapeCode
+extp6
+extexpr
+extstmt
+extframeshift
 prcdaCo
 	mfs8:0
 	alc32
@@ -390,6 +408,10 @@ prcdaDe
 	cal1
 	ld2
 	ret
+rsw1*GLSYM_ARRAY
+rsw1*GLSYM_FUNCTION
+rsw1*GLSYM_WORD
+rsw1*glsyms
 rsw1*variables
 rsw1*varcnt
 rsw1*activecharacter
@@ -3072,6 +3094,7 @@ loc2
 	ldc0
 	cal2
 	ld2
+loc4
 	xfp16
 	m10
 	drf
@@ -3154,6 +3177,7 @@ loc2
 	ldc0
 	cal2
 	ld2
+loc4
 	xfp16
 	m10
 	drf
@@ -3167,7 +3191,7 @@ loc1
 rsw1*continueaddress
 rsw1*breakaddress
 rsw1*addrcounter
-rsw1024*strbuf
+rsw16384*strbuf
 rsw1*strbufsz
 rsw6*ra
 prcexpect
@@ -3752,11 +3776,6 @@ prclprimary
 	ldc0
 	ld1
 	erf
-	xfp24
-	sv0
-	ldc0
-	ld1
-	erf
 loc1
 	xfp16
 	drf
@@ -3841,12 +3860,14 @@ loc1
 	ldc0
 	cal1
 	ld2
-	xfp24
-	sv0
-	ldc1
-	ld1
-	erf
-	jlc2
+	xstlex
+	sv2
+	m20
+	ldc0
+	cal0
+	ld2
+	ldc2
+	ret
 loc3
 	xfp16
 	sv0
@@ -3861,10 +3882,76 @@ loc3
 	erf
 ljp1
 loc2
-	xfp24
+	xfp16
+	sv0
+	ldc0
+	ld1
+	erf
+loc5
+	xfp16
 	drf
-	lnt
-	ljz5
+	sv0
+	xstglsyms
+	drf
+	sv0
+	ldc8
+	m10
+	ld0
+	add
+	drf
+	m10
+	ld0
+	ubi
+	ljz6
+	xststrcmp
+	sv2
+	m20
+	xsttokenstring
+	sv0
+	xstdaGet
+	sv2
+	m20
+	xstglsyms
+	drf
+	sv0
+	xfp16
+	drf
+	sv0
+	ldc0
+	cal2
+	ld2
+	sv0
+	ldc8
+	m10
+	ld0
+	add
+	sv0
+	ldc0
+	cal2
+	ld2
+	sv0
+	ldc0
+	m10
+	ld0
+	equ
+	ljz8
+	xfp24
+	sv0
+	xstdaGet
+	sv2
+	m20
+	xstglsyms
+	drf
+	sv0
+	xfp16
+	drf
+	sv0
+	ldc0
+	cal2
+	ld2
+	drf
+	ld1
+	erf
 	xstemits
 	sv2
 	m20
@@ -3889,7 +3976,6 @@ loc2
 	ldc0
 	cal1
 	ld2
-loc5
 	xstlex
 	sv2
 	m20
@@ -3898,13 +3984,134 @@ loc5
 	ld2
 	xfp24
 	drf
-	ljz7
-	ldc2
-	ret
-loc7
+	sv0
+	xstGLSYM_ARRAY
+	drf
+	m10
+	ld0
+	equ
+	ljz9
 	ldc1
 	ret
-ljp9
+ljp10
+loc9
+	xfp24
+	drf
+	sv0
+	xstGLSYM_FUNCTION
+	drf
+	m10
+	ld0
+	equ
+	ljz11
+	ldc1
+	ret
+ljp12
+loc11
+	xfp24
+	drf
+	sv0
+	xstGLSYM_WORD
+	drf
+	m10
+	ld0
+	equ
+	ljz13
+	ldc2
+	ret
+ljp14
+loc13
+	xstfprintf
+	sv2
+	m20
+	xststderr
+	drf
+	sv0
+	lds564
+	sv0
+	xsttokenrow
+	drf
+	sv0
+	ldc1
+	m10
+	ld0
+	add
+	sv0
+	xsttokencol
+	drf
+	sv0
+	ldc1
+	m10
+	ld0
+	add
+	sv0
+	ldc0
+	cal4
+	ld2
+	xstexit
+	sv2
+	m20
+	ldc1
+	sv0
+	ldc0
+	cal1
+	ld2
+loc14
+loc12
+loc10
+loc8
+loc7
+	xfp16
+	sv0
+	xfp16
+	drf
+	sv0
+	ldc1
+	m10
+	ld0
+	add
+	ld1
+	erf
+ljp5
+loc6
+	xstfprintf
+	sv2
+	m20
+	xststderr
+	drf
+	sv0
+	lds598
+	sv0
+	xsttokenstring
+	sv0
+	xsttokenrow
+	drf
+	sv0
+	ldc1
+	m10
+	ld0
+	add
+	sv0
+	xsttokencol
+	drf
+	sv0
+	ldc1
+	m10
+	ld0
+	add
+	sv0
+	ldc0
+	cal5
+	ld2
+	xstexit
+	sv2
+	m20
+	ldc1
+	sv0
+	ldc0
+	cal1
+	ld2
+ljp16
 loc0
 	xfp8
 	drf
@@ -3914,7 +4121,7 @@ loc0
 	m10
 	ld0
 	equ
-	ljz10
+	ljz17
 	xstlex
 	sv2
 	m20
@@ -3929,14 +4136,14 @@ loc0
 	ldc0
 	cal1
 	ld2
-	ldc1
+	ldc2
 	ret
-ljp11
-loc10
+ljp18
+loc17
 	ldc0
 	ret
-loc11
-loc9
+loc18
+loc16
 	ret
 prclexpr
 	alc32
@@ -3975,7 +4182,7 @@ prclexpr
 	xstemits
 	sv2
 	m20
-	lds564
+	lds636
 	sv0
 	ldc0
 	cal1
@@ -3984,7 +4191,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds571
+	lds643
 	sv0
 	ldc0
 	cal1
@@ -4013,7 +4220,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds578
+	lds650
 	sv0
 	ldc0
 	cal1
@@ -4021,7 +4228,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds585
+	lds657
 	sv0
 	ldc0
 	cal1
@@ -4309,7 +4516,7 @@ loc0
 	xstemits
 	sv2
 	m20
-	lds592
+	lds664
 	sv0
 	ldc0
 	cal1
@@ -4326,7 +4533,7 @@ loc0
 	xstemits
 	sv2
 	m20
-	lds598
+	lds670
 	sv0
 	ldc0
 	cal1
@@ -4463,7 +4670,7 @@ loc34
 	xstemits
 	sv2
 	m20
-	lds601
+	lds673
 	sv0
 	ldc0
 	cal1
@@ -4482,7 +4689,7 @@ loc36
 	xstemits
 	sv2
 	m20
-	lds608
+	lds680
 	sv0
 	ldc0
 	cal1
@@ -4499,7 +4706,7 @@ loc36
 	xstemits
 	sv2
 	m20
-	lds614
+	lds686
 	sv0
 	ldc0
 	cal1
@@ -4530,7 +4737,7 @@ loc38
 	xstemits
 	sv2
 	m20
-	lds617
+	lds689
 	sv0
 	ldc0
 	cal1
@@ -4547,7 +4754,7 @@ loc38
 	xstemits
 	sv2
 	m20
-	lds623
+	lds695
 	sv0
 	ldc0
 	cal1
@@ -4632,7 +4839,7 @@ loc40
 	xstemits
 	sv2
 	m20
-	lds626
+	lds698
 	sv0
 	ldc0
 	cal1
@@ -4640,7 +4847,7 @@ loc40
 	xstemits
 	sv2
 	m20
-	lds633
+	lds705
 	sv0
 	ldc0
 	cal1
@@ -4648,7 +4855,7 @@ loc40
 	xstemits
 	sv2
 	m20
-	lds640
+	lds712
 	sv0
 	ldc0
 	cal1
@@ -4656,7 +4863,7 @@ loc40
 	xstemits
 	sv2
 	m20
-	lds647
+	lds719
 	sv0
 	ldc0
 	cal1
@@ -4687,7 +4894,7 @@ loc42
 	xstemits
 	sv2
 	m20
-	lds654
+	lds726
 	sv0
 	ldc0
 	cal1
@@ -4695,7 +4902,7 @@ loc42
 	xstemits
 	sv2
 	m20
-	lds661
+	lds733
 	sv0
 	ldc0
 	cal1
@@ -4703,7 +4910,7 @@ loc42
 	xstemits
 	sv2
 	m20
-	lds668
+	lds740
 	sv0
 	ldc0
 	cal1
@@ -4711,7 +4918,7 @@ loc42
 	xstemits
 	sv2
 	m20
-	lds675
+	lds747
 	sv0
 	ldc0
 	cal1
@@ -4724,7 +4931,7 @@ loc44
 	xststderr
 	drf
 	sv0
-	lds682
+	lds754
 	sv0
 	xfp24
 	drf
@@ -4785,6 +4992,23 @@ loc25
 	ld0
 	equ
 	ljz46
+	xfp16
+	drf
+	sv0
+	ldc1
+	m10
+	ld0
+	neq
+	ljz47
+	xstemits
+	sv2
+	m20
+	lds803
+	sv0
+	ldc0
+	cal1
+	ld2
+loc47
 	xstlex
 	sv2
 	m20
@@ -4794,7 +5018,7 @@ loc25
 	xstemits
 	sv2
 	m20
-	lds731
+	lds810
 	sv0
 	ldc0
 	cal1
@@ -4802,7 +5026,7 @@ loc25
 	xstemits
 	sv2
 	m20
-	lds738
+	lds817
 	sv0
 	ldc0
 	cal1
@@ -4834,15 +5058,15 @@ loc25
 	m10
 	ld0
 	neq
-	ljz47
+	ljz49
 	xfp88
 	sv0
 	ldc0
 	ld1
 	erf
-loc48
+loc50
 	ldc1
-	ljz49
+	ljz51
 	xfp24
 	sv0
 	xstpeek
@@ -4861,7 +5085,7 @@ loc48
 	m10
 	ld0
 	equ
-	ljz50
+	ljz52
 	xfp80
 	sv0
 	ldc2
@@ -4884,8 +5108,8 @@ loc48
 	inc
 	erf
 	dec
-ljp51
-loc50
+ljp53
+loc52
 	xfp24
 	drf
 	sv0
@@ -4894,7 +5118,7 @@ loc50
 	m10
 	ld0
 	equ
-	ljz52
+	ljz54
 	xfp80
 	sv0
 	ldc1
@@ -4917,18 +5141,18 @@ loc50
 	inc
 	erf
 	dec
-ljp53
-loc52
+ljp55
+loc54
 	xfp72
 	drf
-	ljz54
+	ljz56
 	xstfprintf
 	sv2
 	m20
 	xststderr
 	drf
 	sv0
-	lds745
+	lds824
 	sv0
 	xsttokenrow
 	drf
@@ -4957,7 +5181,7 @@ loc52
 	ldc0
 	cal1
 	ld2
-loc54
+loc56
 	xfp80
 	sv0
 	ldc0
@@ -4969,8 +5193,8 @@ loc54
 	inc
 	erf
 	dec
+loc55
 loc53
-loc51
 	xstexpr
 	sv2
 	m20
@@ -4984,20 +5208,20 @@ loc51
 	m10
 	ld0
 	equ
-	ljz56
+	ljz58
 	xstemits
 	sv2
 	m20
-	lds804
+	lds883
 	sv0
 	ldc0
 	cal1
 	ld2
-loc56
+loc58
 	xstemits
 	sv2
 	m20
-	lds811
+	lds890
 	sv0
 	ldc0
 	cal1
@@ -5020,15 +5244,15 @@ loc56
 	m10
 	ld0
 	equ
-	ljz58
+	ljz60
 	xstlex
 	sv2
 	m20
 	ldc0
 	cal0
 	ld2
-ljp59
-loc58
+ljp61
+loc60
 	xfp24
 	drf
 	sv0
@@ -5037,10 +5261,10 @@ loc58
 	m10
 	ld0
 	equ
-	ljz60
-	jlc49
-loc60
-loc59
+	ljz62
+	jlc51
+loc62
+loc61
 	xfp88
 	sv0
 	xfp88
@@ -5052,9 +5276,9 @@ loc59
 	add
 	ld1
 	erf
-ljp48
+ljp50
+loc51
 loc49
-loc47
 	xstexpect
 	sv2
 	m20
@@ -5066,11 +5290,11 @@ loc47
 	ld2
 	xfp64
 	drf
-	ljz63
+	ljz65
 	xstemits
 	sv2
 	m20
-	lds818
+	lds897
 	sv0
 	ldc0
 	cal1
@@ -5092,11 +5316,11 @@ loc47
 	ldc0
 	cal1
 	ld2
-loc63
+loc65
 	xstemits
 	sv2
 	m20
-	lds824
+	lds903
 	sv0
 	ldc0
 	cal1
@@ -5121,7 +5345,7 @@ loc63
 	xstemits
 	sv2
 	m20
-	lds830
+	lds909
 	sv0
 	ldc0
 	cal1
@@ -5146,7 +5370,7 @@ loc63
 	xstemits
 	sv2
 	m20
-	lds836
+	lds915
 	sv0
 	ldc0
 	cal1
@@ -5168,11 +5392,11 @@ loc63
 	m10
 	ld0
 	equ
-	ljz65
+	ljz67
 	xstemits
 	sv2
 	m20
-	lds843
+	lds922
 	sv0
 	ldc0
 	cal1
@@ -5180,7 +5404,7 @@ loc63
 	xstemits
 	sv2
 	m20
-	lds850
+	lds929
 	sv0
 	ldc0
 	cal1
@@ -5191,8 +5415,8 @@ loc63
 	ldc0
 	cal0
 	ld2
-ljp66
-loc65
+ljp68
+loc67
 	xstpeek
 	sv2
 	m20
@@ -5205,11 +5429,11 @@ loc65
 	m10
 	ld0
 	equ
-	ljz67
+	ljz69
 	xstemits
 	sv2
 	m20
-	lds857
+	lds936
 	sv0
 	ldc0
 	cal1
@@ -5220,8 +5444,8 @@ loc65
 	ldc0
 	cal0
 	ld2
-loc67
-loc66
+loc69
+loc68
 loc46
 	xfp24
 	sv0
@@ -5235,16 +5459,21 @@ loc46
 	erf
 	xfp16
 	drf
-	ljz70
+	sv0
+	ldc2
+	m10
+	ld0
+	equ
+	ljz72
 	xstemits
 	sv2
 	m20
-	lds864
+	lds943
 	sv0
 	ldc0
 	cal1
 	ld2
-loc70
+loc72
 	ldc0
 	ret
 prcp5
@@ -5285,7 +5514,7 @@ prcp5
 	xstemits
 	sv2
 	m20
-	lds871
+	lds950
 	sv0
 	ldc0
 	cal1
@@ -5318,7 +5547,7 @@ loc0
 	xstemits
 	sv2
 	m20
-	lds878
+	lds957
 	sv0
 	ldc0
 	cal1
@@ -5376,7 +5605,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds885
+	lds964
 	sv0
 	ldc0
 	cal1
@@ -5452,7 +5681,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds892
+	lds971
 	sv0
 	ldc0
 	cal1
@@ -5466,7 +5695,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds899
+	lds978
 	sv0
 	ldc0
 	cal1
@@ -5474,7 +5703,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds906
+	lds985
 	sv0
 	ldc0
 	cal1
@@ -5482,7 +5711,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds913
+	lds992
 	sv0
 	ldc0
 	cal1
@@ -5507,7 +5736,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds920
+	lds999
 	sv0
 	ldc0
 	cal1
@@ -5521,7 +5750,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds927
+	lds1006
 	sv0
 	ldc0
 	cal1
@@ -5529,7 +5758,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds934
+	lds1013
 	sv0
 	ldc0
 	cal1
@@ -5537,7 +5766,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds941
+	lds1020
 	sv0
 	ldc0
 	cal1
@@ -5562,7 +5791,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds947
+	lds1026
 	sv0
 	ldc0
 	cal1
@@ -5576,7 +5805,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds954
+	lds1033
 	sv0
 	ldc0
 	cal1
@@ -5584,7 +5813,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds961
+	lds1040
 	sv0
 	ldc0
 	cal1
@@ -5592,7 +5821,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds968
+	lds1047
 	sv0
 	ldc0
 	cal1
@@ -5617,7 +5846,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds975
+	lds1054
 	sv0
 	ldc0
 	cal1
@@ -5631,7 +5860,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds982
+	lds1061
 	sv0
 	ldc0
 	cal1
@@ -5639,7 +5868,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds989
+	lds1068
 	sv0
 	ldc0
 	cal1
@@ -5647,7 +5876,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds996
+	lds1075
 	sv0
 	ldc0
 	cal1
@@ -5672,7 +5901,7 @@ loc10
 	xstemits
 	sv2
 	m20
-	lds1003
+	lds1082
 	sv0
 	ldc0
 	cal1
@@ -5686,7 +5915,7 @@ loc10
 	xstemits
 	sv2
 	m20
-	lds1010
+	lds1089
 	sv0
 	ldc0
 	cal1
@@ -5694,7 +5923,7 @@ loc10
 	xstemits
 	sv2
 	m20
-	lds1017
+	lds1096
 	sv0
 	ldc0
 	cal1
@@ -5702,7 +5931,7 @@ loc10
 	xstemits
 	sv2
 	m20
-	lds1024
+	lds1103
 	sv0
 	ldc0
 	cal1
@@ -5727,7 +5956,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1031
+	lds1110
 	sv0
 	ldc0
 	cal1
@@ -5741,7 +5970,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1038
+	lds1117
 	sv0
 	ldc0
 	cal1
@@ -5749,7 +5978,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1045
+	lds1124
 	sv0
 	ldc0
 	cal1
@@ -5757,7 +5986,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1052
+	lds1131
 	sv0
 	ldc0
 	cal1
@@ -5829,7 +6058,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds1059
+	lds1138
 	sv0
 	ldc0
 	cal1
@@ -5843,7 +6072,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds1066
+	lds1145
 	sv0
 	ldc0
 	cal1
@@ -5851,7 +6080,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds1073
+	lds1152
 	sv0
 	ldc0
 	cal1
@@ -5859,7 +6088,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds1080
+	lds1159
 	sv0
 	ldc0
 	cal1
@@ -5884,7 +6113,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds1087
+	lds1166
 	sv0
 	ldc0
 	cal1
@@ -5898,7 +6127,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds1094
+	lds1173
 	sv0
 	ldc0
 	cal1
@@ -5906,7 +6135,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds1101
+	lds1180
 	sv0
 	ldc0
 	cal1
@@ -5914,7 +6143,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds1108
+	lds1187
 	sv0
 	ldc0
 	cal1
@@ -5982,7 +6211,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds1115
+	lds1194
 	sv0
 	ldc0
 	cal1
@@ -5996,7 +6225,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds1122
+	lds1201
 	sv0
 	ldc0
 	cal1
@@ -6004,7 +6233,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds1129
+	lds1208
 	sv0
 	ldc0
 	cal1
@@ -6012,7 +6241,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds1136
+	lds1215
 	sv0
 	ldc0
 	cal1
@@ -6037,7 +6266,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds1143
+	lds1222
 	sv0
 	ldc0
 	cal1
@@ -6051,7 +6280,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds1150
+	lds1229
 	sv0
 	ldc0
 	cal1
@@ -6059,7 +6288,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds1157
+	lds1236
 	sv0
 	ldc0
 	cal1
@@ -6067,7 +6296,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds1164
+	lds1243
 	sv0
 	ldc0
 	cal1
@@ -6092,7 +6321,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds1171
+	lds1250
 	sv0
 	ldc0
 	cal1
@@ -6106,7 +6335,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds1178
+	lds1257
 	sv0
 	ldc0
 	cal1
@@ -6114,7 +6343,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds1185
+	lds1264
 	sv0
 	ldc0
 	cal1
@@ -6122,7 +6351,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds1192
+	lds1271
 	sv0
 	ldc0
 	cal1
@@ -6147,7 +6376,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds1199
+	lds1278
 	sv0
 	ldc0
 	cal1
@@ -6161,7 +6390,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds1206
+	lds1285
 	sv0
 	ldc0
 	cal1
@@ -6169,7 +6398,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds1213
+	lds1292
 	sv0
 	ldc0
 	cal1
@@ -6177,7 +6406,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds1220
+	lds1299
 	sv0
 	ldc0
 	cal1
@@ -6202,7 +6431,7 @@ loc10
 	xstemits
 	sv2
 	m20
-	lds1227
+	lds1306
 	sv0
 	ldc0
 	cal1
@@ -6216,7 +6445,7 @@ loc10
 	xstemits
 	sv2
 	m20
-	lds1234
+	lds1313
 	sv0
 	ldc0
 	cal1
@@ -6224,7 +6453,7 @@ loc10
 	xstemits
 	sv2
 	m20
-	lds1241
+	lds1320
 	sv0
 	ldc0
 	cal1
@@ -6232,7 +6461,7 @@ loc10
 	xstemits
 	sv2
 	m20
-	lds1248
+	lds1327
 	sv0
 	ldc0
 	cal1
@@ -6257,7 +6486,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1255
+	lds1334
 	sv0
 	ldc0
 	cal1
@@ -6271,7 +6500,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1262
+	lds1341
 	sv0
 	ldc0
 	cal1
@@ -6279,7 +6508,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1269
+	lds1348
 	sv0
 	ldc0
 	cal1
@@ -6287,7 +6516,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1276
+	lds1355
 	sv0
 	ldc0
 	cal1
@@ -6312,7 +6541,7 @@ loc14
 	xstemits
 	sv2
 	m20
-	lds1283
+	lds1362
 	sv0
 	ldc0
 	cal1
@@ -6326,7 +6555,7 @@ loc14
 	xstemits
 	sv2
 	m20
-	lds1290
+	lds1369
 	sv0
 	ldc0
 	cal1
@@ -6334,7 +6563,7 @@ loc14
 	xstemits
 	sv2
 	m20
-	lds1297
+	lds1376
 	sv0
 	ldc0
 	cal1
@@ -6342,7 +6571,7 @@ loc14
 	xstemits
 	sv2
 	m20
-	lds1304
+	lds1383
 	sv0
 	ldc0
 	cal1
@@ -6367,7 +6596,7 @@ loc16
 	xstemits
 	sv2
 	m20
-	lds1311
+	lds1390
 	sv0
 	ldc0
 	cal1
@@ -6381,7 +6610,7 @@ loc16
 	xstemits
 	sv2
 	m20
-	lds1318
+	lds1397
 	sv0
 	ldc0
 	cal1
@@ -6389,7 +6618,7 @@ loc16
 	xstemits
 	sv2
 	m20
-	lds1325
+	lds1404
 	sv0
 	ldc0
 	cal1
@@ -6397,7 +6626,7 @@ loc16
 	xstemits
 	sv2
 	m20
-	lds1332
+	lds1411
 	sv0
 	ldc0
 	cal1
@@ -6444,7 +6673,7 @@ prcp1
 	xstemits
 	sv2
 	m20
-	lds1339
+	lds1418
 	sv0
 	ldc0
 	cal1
@@ -6458,7 +6687,7 @@ prcp1
 	xstemits
 	sv2
 	m20
-	lds1346
+	lds1425
 	sv0
 	ldc0
 	cal1
@@ -6466,7 +6695,7 @@ prcp1
 	xstemits
 	sv2
 	m20
-	lds1353
+	lds1432
 	sv0
 	ldc0
 	cal1
@@ -6484,7 +6713,7 @@ loc1
 	xstemits
 	sv2
 	m20
-	lds1360
+	lds1439
 	sv0
 	ldc0
 	cal1
@@ -6498,7 +6727,7 @@ loc1
 	xstemits
 	sv2
 	m20
-	lds1367
+	lds1446
 	sv0
 	ldc0
 	cal1
@@ -6506,7 +6735,7 @@ loc1
 	xstemits
 	sv2
 	m20
-	lds1374
+	lds1453
 	sv0
 	ldc0
 	cal1
@@ -6514,7 +6743,7 @@ loc1
 	xstemits
 	sv2
 	m20
-	lds1381
+	lds1460
 	sv0
 	ldc0
 	cal1
@@ -6522,7 +6751,7 @@ loc1
 	xstemits
 	sv2
 	m20
-	lds1388
+	lds1467
 	sv0
 	ldc0
 	cal1
@@ -6530,7 +6759,7 @@ loc1
 	xstemits
 	sv2
 	m20
-	lds1395
+	lds1474
 	sv0
 	ldc0
 	cal1
@@ -6538,7 +6767,7 @@ loc1
 	xstemits
 	sv2
 	m20
-	lds1402
+	lds1481
 	sv0
 	ldc0
 	cal1
@@ -6556,7 +6785,7 @@ loc3
 	xstemits
 	sv2
 	m20
-	lds1409
+	lds1488
 	sv0
 	ldc0
 	cal1
@@ -6570,7 +6799,7 @@ loc3
 	xstemits
 	sv2
 	m20
-	lds1416
+	lds1495
 	sv0
 	ldc0
 	cal1
@@ -6578,7 +6807,7 @@ loc3
 	xstemits
 	sv2
 	m20
-	lds1423
+	lds1502
 	sv0
 	ldc0
 	cal1
@@ -6586,7 +6815,7 @@ loc3
 	xstemits
 	sv2
 	m20
-	lds1430
+	lds1509
 	sv0
 	ldc0
 	cal1
@@ -6594,7 +6823,7 @@ loc3
 	xstemits
 	sv2
 	m20
-	lds1437
+	lds1516
 	sv0
 	ldc0
 	cal1
@@ -6602,7 +6831,7 @@ loc3
 	xstemits
 	sv2
 	m20
-	lds1444
+	lds1523
 	sv0
 	ldc0
 	cal1
@@ -6610,7 +6839,7 @@ loc3
 	xstemits
 	sv2
 	m20
-	lds1451
+	lds1530
 	sv0
 	ldc0
 	cal1
@@ -6618,7 +6847,7 @@ loc3
 	xstemits
 	sv2
 	m20
-	lds1458
+	lds1537
 	sv0
 	ldc0
 	cal1
@@ -6636,7 +6865,7 @@ loc5
 	xstemits
 	sv2
 	m20
-	lds1465
+	lds1544
 	sv0
 	ldc0
 	cal1
@@ -6650,7 +6879,7 @@ loc5
 	xstemits
 	sv2
 	m20
-	lds1472
+	lds1551
 	sv0
 	ldc0
 	cal1
@@ -6658,7 +6887,7 @@ loc5
 	xstemits
 	sv2
 	m20
-	lds1479
+	lds1558
 	sv0
 	ldc0
 	cal1
@@ -6666,7 +6895,7 @@ loc5
 	xstemits
 	sv2
 	m20
-	lds1486
+	lds1565
 	sv0
 	ldc0
 	cal1
@@ -6674,7 +6903,7 @@ loc5
 	xstemits
 	sv2
 	m20
-	lds1493
+	lds1572
 	sv0
 	ldc0
 	cal1
@@ -6682,7 +6911,7 @@ loc5
 	xstemits
 	sv2
 	m20
-	lds1500
+	lds1579
 	sv0
 	ldc0
 	cal1
@@ -6690,7 +6919,7 @@ loc5
 	xstemits
 	sv2
 	m20
-	lds1507
+	lds1586
 	sv0
 	ldc0
 	cal1
@@ -6698,7 +6927,7 @@ loc5
 	xstemits
 	sv2
 	m20
-	lds1514
+	lds1593
 	sv0
 	ldc0
 	cal1
@@ -6716,7 +6945,7 @@ loc7
 	xstemits
 	sv2
 	m20
-	lds1521
+	lds1600
 	sv0
 	ldc0
 	cal1
@@ -6730,7 +6959,7 @@ loc7
 	xstemits
 	sv2
 	m20
-	lds1528
+	lds1607
 	sv0
 	ldc0
 	cal1
@@ -6738,7 +6967,7 @@ loc7
 	xstemits
 	sv2
 	m20
-	lds1535
+	lds1614
 	sv0
 	ldc0
 	cal1
@@ -6746,7 +6975,7 @@ loc7
 	xstemits
 	sv2
 	m20
-	lds1542
+	lds1621
 	sv0
 	ldc0
 	cal1
@@ -6754,7 +6983,7 @@ loc7
 	xstemits
 	sv2
 	m20
-	lds1549
+	lds1628
 	sv0
 	ldc0
 	cal1
@@ -6762,7 +6991,7 @@ loc7
 	xstemits
 	sv2
 	m20
-	lds1556
+	lds1635
 	sv0
 	ldc0
 	cal1
@@ -6770,7 +6999,7 @@ loc7
 	xstemits
 	sv2
 	m20
-	lds1563
+	lds1642
 	sv0
 	ldc0
 	cal1
@@ -6778,7 +7007,7 @@ loc7
 	xstemits
 	sv2
 	m20
-	lds1570
+	lds1649
 	sv0
 	ldc0
 	cal1
@@ -6796,7 +7025,7 @@ loc9
 	xstemits
 	sv2
 	m20
-	lds1577
+	lds1656
 	sv0
 	ldc0
 	cal1
@@ -6810,7 +7039,7 @@ loc9
 	xstemits
 	sv2
 	m20
-	lds1584
+	lds1663
 	sv0
 	ldc0
 	cal1
@@ -6818,7 +7047,7 @@ loc9
 	xstemits
 	sv2
 	m20
-	lds1591
+	lds1670
 	sv0
 	ldc0
 	cal1
@@ -6826,7 +7055,7 @@ loc9
 	xstemits
 	sv2
 	m20
-	lds1598
+	lds1677
 	sv0
 	ldc0
 	cal1
@@ -6834,7 +7063,7 @@ loc9
 	xstemits
 	sv2
 	m20
-	lds1605
+	lds1684
 	sv0
 	ldc0
 	cal1
@@ -6842,7 +7071,7 @@ loc9
 	xstemits
 	sv2
 	m20
-	lds1612
+	lds1691
 	sv0
 	ldc0
 	cal1
@@ -6850,7 +7079,7 @@ loc9
 	xstemits
 	sv2
 	m20
-	lds1619
+	lds1698
 	sv0
 	ldc0
 	cal1
@@ -6868,7 +7097,7 @@ loc11
 	xstemits
 	sv2
 	m20
-	lds1626
+	lds1705
 	sv0
 	ldc0
 	cal1
@@ -6882,7 +7111,7 @@ loc11
 	xstemits
 	sv2
 	m20
-	lds1633
+	lds1712
 	sv0
 	ldc0
 	cal1
@@ -6890,7 +7119,7 @@ loc11
 	xstemits
 	sv2
 	m20
-	lds1640
+	lds1719
 	sv0
 	ldc0
 	cal1
@@ -6898,7 +7127,7 @@ loc11
 	xstemits
 	sv2
 	m20
-	lds1647
+	lds1726
 	sv0
 	ldc0
 	cal1
@@ -6906,7 +7135,7 @@ loc11
 	xstemits
 	sv2
 	m20
-	lds1654
+	lds1733
 	sv0
 	ldc0
 	cal1
@@ -6914,7 +7143,7 @@ loc11
 	xstemits
 	sv2
 	m20
-	lds1660
+	lds1739
 	sv0
 	ldc0
 	cal1
@@ -6922,7 +7151,7 @@ loc11
 	xstemits
 	sv2
 	m20
-	lds1667
+	lds1746
 	sv0
 	ldc0
 	cal1
@@ -6940,7 +7169,7 @@ loc13
 	xstemits
 	sv2
 	m20
-	lds1674
+	lds1753
 	sv0
 	ldc0
 	cal1
@@ -6948,7 +7177,7 @@ loc13
 	xstemits
 	sv2
 	m20
-	lds1681
+	lds1760
 	sv0
 	ldc0
 	cal1
@@ -6956,7 +7185,7 @@ loc13
 	xstemits
 	sv2
 	m20
-	lds1688
+	lds1767
 	sv0
 	ldc0
 	cal1
@@ -6964,7 +7193,7 @@ loc13
 	xstemits
 	sv2
 	m20
-	lds1695
+	lds1774
 	sv0
 	ldc0
 	cal1
@@ -6982,7 +7211,7 @@ loc15
 	xstemits
 	sv2
 	m20
-	lds1702
+	lds1781
 	sv0
 	ldc0
 	cal1
@@ -6996,7 +7225,7 @@ loc15
 	xstemits
 	sv2
 	m20
-	lds1709
+	lds1788
 	sv0
 	ldc0
 	cal1
@@ -7004,7 +7233,7 @@ loc15
 	xstemits
 	sv2
 	m20
-	lds1716
+	lds1795
 	sv0
 	ldc0
 	cal1
@@ -7022,7 +7251,7 @@ loc17
 	xstemits
 	sv2
 	m20
-	lds1723
+	lds1802
 	sv0
 	ldc0
 	cal1
@@ -7030,7 +7259,7 @@ loc17
 	xstemits
 	sv2
 	m20
-	lds1730
+	lds1809
 	sv0
 	ldc0
 	cal1
@@ -7038,7 +7267,7 @@ loc17
 	xstemits
 	sv2
 	m20
-	lds1737
+	lds1816
 	sv0
 	ldc0
 	cal1
@@ -7046,7 +7275,7 @@ loc17
 	xstemits
 	sv2
 	m20
-	lds1744
+	lds1823
 	sv0
 	ldc0
 	cal1
@@ -7054,7 +7283,7 @@ loc17
 	xstemits
 	sv2
 	m20
-	lds1751
+	lds1830
 	sv0
 	ldc0
 	cal1
@@ -7072,7 +7301,7 @@ loc19
 	xstemits
 	sv2
 	m20
-	lds1758
+	lds1837
 	sv0
 	ldc0
 	cal1
@@ -7080,7 +7309,7 @@ loc19
 	xstemits
 	sv2
 	m20
-	lds1765
+	lds1844
 	sv0
 	ldc0
 	cal1
@@ -7088,7 +7317,7 @@ loc19
 	xstemits
 	sv2
 	m20
-	lds1772
+	lds1851
 	sv0
 	ldc0
 	cal1
@@ -7096,7 +7325,7 @@ loc19
 	xstemits
 	sv2
 	m20
-	lds1779
+	lds1858
 	sv0
 	ldc0
 	cal1
@@ -7104,7 +7333,7 @@ loc19
 	xstemits
 	sv2
 	m20
-	lds1786
+	lds1865
 	sv0
 	ldc0
 	cal1
@@ -7132,7 +7361,7 @@ prcexpr
 	ld2
 	ret
 prcstmt
-	alc80
+	alc96
 	xfp8
 	sv0
 	xstpeek
@@ -7232,7 +7461,7 @@ loc0
 	xstemits
 	sv2
 	m20
-	lds1793
+	lds1872
 	sv0
 	ldc0
 	cal1
@@ -7285,7 +7514,7 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds1799
+	lds1878
 	sv0
 	ldc0
 	cal1
@@ -7386,7 +7615,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds1805
+	lds1884
 	sv0
 	ldc0
 	cal1
@@ -7403,7 +7632,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds1810
+	lds1889
 	sv0
 	ldc0
 	cal1
@@ -7417,7 +7646,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds1813
+	lds1892
 	sv0
 	ldc0
 	cal1
@@ -7448,7 +7677,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds1819
+	lds1898
 	sv0
 	ldc0
 	cal1
@@ -7473,7 +7702,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds1824
+	lds1903
 	sv0
 	ldc0
 	cal1
@@ -7490,7 +7719,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds1829
+	lds1908
 	sv0
 	ldc0
 	cal1
@@ -7532,13 +7761,13 @@ loc8
 	ldc0
 	cal0
 	ld2
-	xfp32
+	xfp40
 	sv0
 	xstcontinueaddress
 	drf
 	ld1
 	erf
-	xfp40
+	xfp48
 	sv0
 	xstbreakaddress
 	drf
@@ -7546,10 +7775,15 @@ loc8
 	erf
 	xstcontinueaddress
 	sv0
-	xfp16
+	xfp32
 	sv0
 	xstaddrcounter
 	drf
+	sv0
+	ldc2
+	m10
+	ld0
+	add
 	ld1
 	erf
 	ld1
@@ -7569,12 +7803,18 @@ loc8
 	erf
 	ld1
 	erf
+	xfp16
+	sv0
+	xstaddrcounter
+	drf
+	ld1
+	erf
 	xstaddrcounter
 	sv0
 	xstaddrcounter
 	drf
 	sv0
-	ldc2
+	ldc3
 	m10
 	ld0
 	add
@@ -7583,7 +7823,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds1832
+	lds1911
 	sv0
 	ldc0
 	cal1
@@ -7600,7 +7840,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds1837
+	lds1916
 	sv0
 	ldc0
 	cal1
@@ -7611,13 +7851,13 @@ loc8
 	ldc0
 	cal0
 	ld2
-	xfp48
+	xfp56
 	sv0
 	xstemit_mode
 	drf
 	ld1
 	erf
-	xfp56
+	xfp64
 	sv0
 	xstemit_dynarray
 	drf
@@ -7640,7 +7880,7 @@ loc8
 	ld2
 	ld1
 	erf
-	xfp64
+	xfp72
 	sv0
 	xstemit_dynarray
 	drf
@@ -7670,20 +7910,20 @@ loc8
 	ld2
 	xstemit_mode
 	sv0
-	xfp48
+	xfp56
 	drf
 	ld1
 	erf
 	xstemit_dynarray
 	sv0
-	xfp56
+	xfp64
 	drf
 	ld1
 	erf
 	xstemits
 	sv2
 	m20
-	lds1840
+	lds1919
 	sv0
 	ldc0
 	cal1
@@ -7714,7 +7954,32 @@ loc8
 	xstemits
 	sv2
 	m20
-	xfp64
+	lds1925
+	sv0
+	ldc0
+	cal1
+	ld2
+	xstemitd
+	sv2
+	m20
+	xfp32
+	drf
+	sv0
+	ldc0
+	cal1
+	ld2
+	xstemits
+	sv2
+	m20
+	lds1930
+	sv0
+	ldc0
+	cal1
+	ld2
+	xstemits
+	sv2
+	m20
+	xfp72
 	drf
 	drf
 	sv0
@@ -7724,7 +7989,7 @@ loc8
 	xstdaDe
 	sv2
 	m20
-	xfp64
+	xfp72
 	drf
 	sv0
 	ldc0
@@ -7733,7 +7998,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds1846
+	lds1933
 	sv0
 	ldc0
 	cal1
@@ -7758,7 +8023,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds1851
+	lds1938
 	sv0
 	ldc0
 	cal1
@@ -7775,20 +8040,20 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds1856
+	lds1943
 	sv0
 	ldc0
 	cal1
 	ld2
 	xstcontinueaddress
 	sv0
-	xfp32
+	xfp40
 	drf
 	ld1
 	erf
 	xstbreakaddress
 	sv0
-	xfp40
+	xfp48
 	drf
 	ld1
 	erf
@@ -7820,7 +8085,7 @@ loc10
 	xstemits
 	sv2
 	m20
-	lds1859
+	lds1946
 	sv0
 	ldc0
 	cal1
@@ -7991,7 +8256,7 @@ loc14
 	xstemits
 	sv2
 	m20
-	lds1866
+	lds1953
 	sv0
 	ldc0
 	cal1
@@ -8064,7 +8329,7 @@ loc14
 	xstemits
 	sv2
 	m20
-	lds1872
+	lds1959
 	sv0
 	ldc0
 	cal1
@@ -8090,7 +8355,7 @@ loc17
 	xstemits
 	sv2
 	m20
-	lds1877
+	lds1964
 	sv0
 	ldc0
 	cal1
@@ -8107,7 +8372,7 @@ loc17
 	xstemits
 	sv2
 	m20
-	lds1882
+	lds1969
 	sv0
 	ldc0
 	cal1
@@ -8158,7 +8423,7 @@ loc20
 	xstemits
 	sv2
 	m20
-	lds1885
+	lds1972
 	sv0
 	ldc0
 	cal1
@@ -8175,7 +8440,7 @@ loc20
 	xstemits
 	sv2
 	m20
-	lds1890
+	lds1977
 	sv0
 	ldc0
 	cal1
@@ -8209,7 +8474,7 @@ loc3
 	ret
 rsw1*frameshift
 prctop
-	alc64
+	alc80
 loc0
 	ldc1
 	ljz1
@@ -8241,7 +8506,7 @@ loc0
 	xstemits
 	sv2
 	m20
-	lds1893
+	lds1980
 	sv0
 	ldc0
 	cal1
@@ -8297,7 +8562,7 @@ loc2
 	xstemits
 	sv2
 	m20
-	lds1898
+	lds1985
 	sv0
 	ldc0
 	cal1
@@ -8327,13 +8592,177 @@ loc2
 	ldc0
 	cal1
 	ld2
+	xfp16
+	sv0
+	xstdaPush
+	sv2
+	m20
+	xstglsyms
+	drf
+	sv0
+	ldc0
+	sv0
+	ldc0
+	cal2
+	ld2
+	ld1
+	erf
+	xstmemcpy
+	sv2
+	m20
+	xfp16
+	drf
+	sv0
+	ldc8
+	m10
+	ld0
+	add
+	sv0
+	xsttokenstring
+	sv0
+	ldc32
+	sv0
+	ldc0
+	cal3
+	ld2
 	xstlex
 	sv2
 	m20
 	ldc0
 	cal0
 	ld2
-ljp5
+	xsttokenkind
+	drf
+	sv0
+	xstTOKLPAR
+	drf
+	m10
+	ld0
+	equ
+	ljz5
+	xfp16
+	drf
+	sv0
+	xstGLSYM_FUNCTION
+	drf
+	ld1
+	erf
+	xstlex
+	sv2
+	m20
+	ldc0
+	cal0
+	ld2
+	xstexpect
+	sv2
+	m20
+	xstTOKRPAR
+	drf
+	sv0
+	ldc0
+	cal1
+	ld2
+ljp6
+loc5
+	xsttokenkind
+	drf
+	sv0
+	xstTOKLBRACK
+	drf
+	m10
+	ld0
+	equ
+	ljz7
+	xfp16
+	drf
+	sv0
+	xstGLSYM_ARRAY
+	drf
+	ld1
+	erf
+	xstlex
+	sv2
+	m20
+	ldc0
+	cal0
+	ld2
+	xstexpect
+	sv2
+	m20
+	xstTOKRBRACK
+	drf
+	sv0
+	ldc0
+	cal1
+	ld2
+ljp8
+loc7
+	xsttokenkind
+	drf
+	sv0
+	xstTOKSEMI
+	drf
+	m10
+	ld0
+	equ
+	ljz9
+	xfp16
+	drf
+	sv0
+	xstGLSYM_WORD
+	drf
+	ld1
+	erf
+	xstlex
+	sv2
+	m20
+	ldc0
+	cal0
+	ld2
+ljp10
+loc9
+	xstfprintf
+	sv2
+	m20
+	xststderr
+	drf
+	sv0
+	lds1990
+	sv0
+	xsttokenkind
+	drf
+	sv0
+	xsttokenrow
+	drf
+	sv0
+	ldc1
+	m10
+	ld0
+	add
+	sv0
+	xsttokencol
+	drf
+	sv0
+	ldc1
+	m10
+	ld0
+	add
+	sv0
+	ldc0
+	cal5
+	ld2
+	xstexit
+	sv2
+	m20
+	ldc1
+	sv0
+	ldc0
+	cal1
+	ld2
+loc10
+loc8
+loc6
+ljp11
 loc4
 	xfp8
 	drf
@@ -8343,7 +8772,7 @@ loc4
 	m10
 	ld0
 	equ
-	ljz6
+	ljz12
 	xstlex
 	sv2
 	m20
@@ -8368,11 +8797,11 @@ loc4
 	m10
 	ld0
 	equ
-	ljz7
+	ljz13
 	xstemits
 	sv2
 	m20
-	lds1903
+	lds2070
 	sv0
 	ldc0
 	cal1
@@ -8388,10 +8817,50 @@ loc4
 	xstemits
 	sv2
 	m20
-	lds1910
+	lds2077
 	sv0
 	ldc0
 	cal1
+	ld2
+	xfp16
+	sv0
+	xstdaPush
+	sv2
+	m20
+	xstglsyms
+	drf
+	sv0
+	ldc0
+	sv0
+	ldc0
+	cal2
+	ld2
+	ld1
+	erf
+	xfp16
+	drf
+	sv0
+	xstGLSYM_WORD
+	drf
+	ld1
+	erf
+	xstmemcpy
+	sv2
+	m20
+	xfp16
+	drf
+	sv0
+	ldc8
+	m10
+	ld0
+	add
+	sv0
+	xsttokenstring
+	sv0
+	ldc32
+	sv0
+	ldc0
+	cal3
 	ld2
 	xstlex
 	sv2
@@ -8399,8 +8868,8 @@ loc4
 	ldc0
 	cal0
 	ld2
-ljp8
-loc7
+ljp14
+loc13
 	xfp8
 	drf
 	sv0
@@ -8409,17 +8878,57 @@ loc7
 	m10
 	ld0
 	equ
-	ljz9
+	ljz15
 	xstlex
 	sv2
 	m20
 	ldc0
 	cal0
 	ld2
+	xfp16
+	sv0
+	xstdaPush
+	sv2
+	m20
+	xstglsyms
+	drf
+	sv0
+	ldc0
+	sv0
+	ldc0
+	cal2
+	ld2
+	ld1
+	erf
+	xfp16
+	drf
+	sv0
+	xstGLSYM_ARRAY
+	drf
+	ld1
+	erf
+	xstmemcpy
+	sv2
+	m20
+	xfp16
+	drf
+	sv0
+	ldc8
+	m10
+	ld0
+	add
+	sv0
+	xsttokenstring
+	sv0
+	ldc32
+	sv0
+	ldc0
+	cal3
+	ld2
 	xstemits
 	sv2
 	m20
-	lds1913
+	lds2080
 	sv0
 	ldc0
 	cal1
@@ -8436,7 +8945,7 @@ loc7
 	xstemits
 	sv2
 	m20
-	lds1918
+	lds2085
 	sv0
 	ldc0
 	cal1
@@ -8479,17 +8988,17 @@ loc7
 	xstemits
 	sv2
 	m20
-	lds1921
+	lds2088
 	sv0
 	ldc0
 	cal1
 	ld2
-ljp10
-loc9
+ljp16
+loc15
 	xstemits
 	sv2
 	m20
-	lds1924
+	lds2091
 	sv0
 	ldc0
 	cal1
@@ -8505,10 +9014,50 @@ loc9
 	xstemits
 	sv2
 	m20
-	lds1929
+	lds2096
 	sv0
 	ldc0
 	cal1
+	ld2
+	xfp16
+	sv0
+	xstdaPush
+	sv2
+	m20
+	xstglsyms
+	drf
+	sv0
+	ldc0
+	sv0
+	ldc0
+	cal2
+	ld2
+	ld1
+	erf
+	xfp16
+	drf
+	sv0
+	xstGLSYM_FUNCTION
+	drf
+	ld1
+	erf
+	xstmemcpy
+	sv2
+	m20
+	xfp16
+	drf
+	sv0
+	ldc8
+	m10
+	ld0
+	add
+	sv0
+	xsttokenstring
+	sv0
+	ldc32
+	sv0
+	ldc0
+	cal3
 	ld2
 	xstexpect
 	sv2
@@ -8540,20 +9089,20 @@ loc9
 	ldc0
 	ld1
 	erf
-	xfp16
+	xfp24
 	sv0
 	ldc0
 	ld1
 	erf
-loc11
-	xfp16
+loc17
+	xfp24
 	drf
 	sv0
 	ldc6
 	m10
 	ld0
 	ubi
-	ljz12
+	ljz18
 	xfp8
 	sv0
 	xstpeek
@@ -8572,10 +9121,10 @@ loc11
 	m10
 	ld0
 	equ
-	ljz13
-	jlc12
-loc13
-	xfp24
+	ljz20
+	jlc18
+loc20
+	xfp32
 	sv0
 	xstdaPush
 	sv2
@@ -8614,7 +9163,7 @@ loc13
 	xstmemcpy
 	sv2
 	m20
-	xfp24
+	xfp32
 	drf
 	sv0
 	ldc8
@@ -8646,7 +9195,7 @@ loc13
 	add
 	ld1
 	erf
-	xfp24
+	xfp32
 	drf
 	sv0
 	xstframeshift
@@ -8656,7 +9205,7 @@ loc13
 	xstemits
 	sv2
 	m20
-	lds1932
+	lds2099
 	sv0
 	ldc0
 	cal1
@@ -8673,7 +9222,7 @@ loc13
 	xstemits
 	sv2
 	m20
-	lds1938
+	lds2105
 	sv0
 	ldc0
 	cal1
@@ -8681,7 +9230,7 @@ loc13
 	xstemitd
 	sv2
 	m20
-	xfp16
+	xfp24
 	drf
 	sv0
 	ldc0
@@ -8690,7 +9239,7 @@ loc13
 	xstemits
 	sv2
 	m20
-	lds1941
+	lds2108
 	sv0
 	ldc0
 	cal1
@@ -8707,23 +9256,24 @@ loc13
 	m10
 	ld0
 	neq
-	ljz15
-	jlc12
-loc15
+	ljz22
+	jlc18
+loc22
 	xstlex
 	sv2
 	m20
 	ldc0
 	cal0
 	ld2
-	xfp16
+loc19
+	xfp24
 	m10
 	drf
 	inc
 	erf
 	dec
-ljp11
-loc12
+ljp17
+loc18
 	xstexpect
 	sv2
 	m20
@@ -8733,13 +9283,13 @@ loc12
 	ldc0
 	cal1
 	ld2
-	xfp32
+	xfp40
 	sv0
 	xstemit_mode
 	drf
 	ld1
 	erf
-	xfp40
+	xfp48
 	sv0
 	xstemit_dynarray
 	drf
@@ -8762,7 +9312,7 @@ loc12
 	ld2
 	ld1
 	erf
-	xfp48
+	xfp56
 	sv0
 	xstemit_dynarray
 	drf
@@ -8776,13 +9326,13 @@ loc12
 	ld2
 	xstemit_mode
 	sv0
-	xfp32
+	xfp40
 	drf
 	ld1
 	erf
 	xstemit_dynarray
 	sv0
-	xfp40
+	xfp48
 	drf
 	ld1
 	erf
@@ -8805,7 +9355,7 @@ loc12
 	xstdaPush
 	sv2
 	m20
-	xfp48
+	xfp56
 	drf
 	sv0
 	xstemit_textbuf
@@ -8816,7 +9366,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1944
+	lds2111
 	sv0
 	ldc0
 	cal1
@@ -8849,7 +9399,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1950
+	lds2117
 	sv0
 	ldc0
 	cal1
@@ -8857,7 +9407,7 @@ loc12
 	xstemits
 	sv2
 	m20
-	xfp48
+	xfp56
 	drf
 	drf
 	sv0
@@ -8867,7 +9417,7 @@ loc12
 	xstdaDe
 	sv2
 	m20
-	xfp48
+	xfp56
 	drf
 	sv0
 	ldc0
@@ -8876,15 +9426,15 @@ loc12
 	xstemits
 	sv2
 	m20
-	lds1953
+	lds2120
 	sv0
 	ldc0
 	cal1
 	ld2
-loc10
-loc8
-ljp17
-loc6
+loc16
+loc14
+ljp24
+loc12
 	xfp8
 	drf
 	sv0
@@ -8893,17 +9443,17 @@ loc6
 	m10
 	ld0
 	equ
-	ljz18
+	ljz25
 	jlc1
-ljp19
-loc18
+ljp26
+loc25
 	xstfprintf
 	sv2
 	m20
 	xststderr
 	drf
 	sv0
-	lds1960
+	lds2127
 	sv0
 	xfp8
 	drf
@@ -8935,9 +9485,9 @@ loc18
 	ldc0
 	cal1
 	ld2
-loc19
-loc17
-loc5
+loc26
+loc24
+loc11
 loc3
 ljp0
 loc1
@@ -8951,7 +9501,7 @@ prcusage
 	xststderr
 	drf
 	sv0
-	lds2000
+	lds2167
 	sv0
 	xfp8
 	drf
@@ -8965,6 +9515,33 @@ prcmain
 	mfs8:0
 	mfs16:1
 	alc48
+	xstGLSYM_ARRAY
+	sv0
+	ldc0
+	ld1
+	erf
+	xstGLSYM_FUNCTION
+	sv0
+	ldc1
+	ld1
+	erf
+	xstGLSYM_WORD
+	sv0
+	ldc2
+	ld1
+	erf
+	xstglsyms
+	sv0
+	xstdaCo
+	sv2
+	m20
+	ldc40
+	sv0
+	ldc0
+	cal1
+	ld2
+	ld1
+	erf
 	xstTOKNUM
 	sv0
 	ldc1
@@ -9320,7 +9897,7 @@ loc0
 	dar
 	drf
 	sv0
-	lds2039
+	lds2206
 	sv0
 	ldc0
 	cal2
@@ -9372,7 +9949,7 @@ loc2
 	dar
 	drf
 	sv0
-	lds2044
+	lds2211
 	sv0
 	ldc0
 	cal2
@@ -9389,7 +9966,7 @@ loc2
 	xststderr
 	drf
 	sv0
-	lds2048
+	lds2215
 	sv0
 	xfp16
 	drf
@@ -9433,7 +10010,7 @@ loc4
 	dar
 	drf
 	sv0
-	lds2073
+	lds2240
 	sv0
 	ldc0
 	cal2
@@ -9450,7 +10027,7 @@ loc4
 	xststderr
 	drf
 	sv0
-	lds2077
+	lds2244
 	sv0
 	xfp16
 	drf
@@ -9512,7 +10089,7 @@ loc6
 	xstemits
 	sv2
 	m20
-	lds2102
+	lds2269
 	sv0
 	ldc0
 	cal1
@@ -9549,7 +10126,7 @@ loc8
 	xstemits
 	sv2
 	m20
-	lds2107
+	lds2274
 	sv0
 	ldc0
 	cal1
@@ -9569,6 +10146,7 @@ loc8
 	ldc0
 	cal1
 	ld2
+loc10
 	xfp24
 	m10
 	drf
@@ -9580,7 +10158,7 @@ loc9
 	xstemits
 	sv2
 	m20
-	lds2110
+	lds2277
 	sv0
 	ldc0
 	cal1
@@ -9605,4 +10183,4 @@ loc9
 	ld2
 	ldc0
 	ret
-str0,66,97,100,32,99,111,100,101,58,32,101,120,112,101,99,116,101,100,32,39,92,39,39,32,97,116,32,37,100,44,37,100,32,98,117,116,32,103,111,116,32,39,37,99,39,10,0,0,66,97,100,32,99,111,100,101,58,32,99,104,97,114,97,99,116,101,114,32,39,37,99,39,32,97,116,32,37,100,44,37,100,32,119,97,115,32,117,110,101,120,112,101,99,116,101,100,10,0,0,66,97,100,32,99,111,100,101,58,32,110,97,109,101,32,105,115,32,116,111,111,32,108,111,110,103,32,97,116,32,37,100,44,37,100,10,0,0,105,102,0,0,101,108,115,101,0,0,119,104,105,108,101,0,0,102,111,114,0,0,101,120,116,101,114,110,0,0,103,108,111,98,97,108,0,0,114,101,116,117,114,110,0,0,98,114,101,97,107,0,0,99,111,110,116,105,110,117,101,0,0,102,108,111,97,116,0,0,100,111,117,98,108,101,0,0,97,117,116,111,0,0,66,73,82,68,83,70,65,76,76,65,80,65,82,84,0,0,66,97,100,32,99,111,100,101,58,32,99,104,97,114,97,99,116,101,114,32,39,37,99,39,32,97,116,32,37,100,44,37,100,32,119,97,115,32,117,110,101,120,112,101,99,116,101,100,10,0,0,37,99,0,0,37,99,0,0,37,115,0,0,37,122,117,0,0,37,122,117,0,0,69,120,112,101,99,116,101,100,32,116,111,107,101,110,32,39,88,88,88,39,40,37,100,41,32,97,116,32,37,100,44,37,100,32,98,117,116,32,103,111,116,32,39,88,88,88,39,40,37,100,41,10,0,0,76,69,120,112,101,99,116,101,100,32,116,111,107,101,110,32,39,88,88,88,39,40,37,100,41,32,97,116,32,37,100,44,37,100,32,98,117,116,32,103,111,116,32,39,88,88,88,39,40,37,100,41,10,0,0,73,110,118,97,108,105,100,32,104,101,120,97,100,101,99,105,109,97,108,32,100,105,103,105,116,58,32,39,92,37,99,39,32,97,116,32,37,100,44,37,100,10,0,0,73,110,118,97,108,105,100,32,104,101,120,97,100,101,99,105,109,97,108,32,100,105,103,105,116,58,32,39,92,37,99,39,32,97,116,32,37,100,44,37,100,10,0,0,73,110,118,97,108,105,100,32,101,115,99,97,112,101,32,99,111,100,101,58,32,39,92,37,99,39,32,97,116,32,37,100,44,37,100,10,0,0,9,120,102,112,0,0,10,0,0,9,120,115,116,0,0,10,0,0,9,100,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,100,97,114,10,0,0,9,108,100,99,0,0,10,0,0,9,56,100,114,10,0,0,9,108,100,99,0,0,10,0,0,9,108,100,115,0,0,10,0,0,9,109,49,48,10,0,0,9,100,114,102,10,0,0,9,100,101,99,10,0,0,9,101,114,102,10,0,0,9,109,49,48,10,0,0,9,100,114,102,10,0,0,9,105,110,99,10,0,0,9,101,114,102,10,0,0,73,110,118,97,108,105,100,32,112,114,105,109,97,114,121,32,101,120,112,114,101,115,115,105,111,110,58,32,39,88,88,88,39,40,37,100,41,32,97,116,32,37,100,44,37,100,10,0,0,9,115,118,50,10,0,0,9,109,50,48,10,0,0,85,110,101,120,112,101,99,116,101,100,32,105,110,116,101,103,101,114,32,97,114,103,117,109,101,110,116,32,97,102,116,101,114,32,97,32,102,112,32,97,114,103,117,109,101,110,116,32,97,116,32,37,100,44,37,100,10,0,0,9,120,102,100,10,0,0,9,115,118,48,10,0,0,9,112,117,120,0,0,9,108,100,99,0,0,9,99,97,108,0,0,9,108,100,50,10,0,0,9,109,48,120,10,0,0,9,120,100,102,10,0,0,9,109,48,120,10,0,0,9,100,114,102,10,0,0,9,110,111,116,10,0,0,9,110,101,103,10,0,0,9,108,110,116,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,97,110,100,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,111,114,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,120,111,114,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,109,117,108,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,100,105,118,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,114,101,109,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,97,100,100,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,115,117,98,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,101,113,117,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,110,101,113,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,117,98,105,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,117,98,101,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,115,104,108,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,117,97,105,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,117,97,101,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,115,104,114,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,97,100,100,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,120,48,49,10,0,0,9,115,117,98,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,120,48,49,10,0,0,9,100,105,118,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,120,48,49,10,0,0,9,114,101,109,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,97,110,100,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,111,114,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,109,49,48,10,0,0,9,100,114,102,10,0,0,9,108,110,116,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,56,101,114,10,0,0,9,109,49,48,10,0,0,9,100,114,102,10,0,0,9,100,101,99,10,0,0,9,101,114,102,10,0,0,9,105,110,99,10,0,0,9,109,49,48,10,0,0,9,100,114,102,10,0,0,9,105,110,99,10,0,0,9,101,114,102,10,0,0,9,100,101,99,10,0,0,9,106,108,99,0,0,9,106,108,99,0,0,108,111,99,0,0,10,0,0,9,108,106,122,0,0,108,106,112,0,0,108,111,99,0,0,10,0,0,108,111,99,0,0,10,0,0,9,108,106,122,0,0,108,106,112,0,0,108,111,99,0,0,10,0,0,9,114,101,116,10,0,0,9,108,106,122,0,0,108,106,112,0,0,108,111,99,0,0,10,0,0,108,111,99,0,0,10,0,0,103,108,98,0,0,101,120,116,0,0,114,115,119,49,42,0,0,10,0,0,114,115,119,0,0,42,0,0,10,0,0,112,114,99,0,0,10,0,0,9,109,102,115,0,0,58,0,0,10,0,0,9,97,108,99,0,0,10,0,0,9,114,101,116,10,0,0,73,110,118,97,108,105,100,32,115,116,97,116,101,109,101,110,116,58,32,39,88,88,88,39,40,37,100,41,32,97,116,32,37,100,44,37,100,10,0,0,85,115,97,103,101,58,32,37,115,32,91,45,112,112,93,32,105,110,112,117,116,45,99,111,100,101,32,111,117,116,112,117,116,45,105,114,10,0,0,45,112,112,0,0,114,98,0,0,70,97,105,108,101,100,32,116,111,32,111,112,101,110,58,32,37,115,58,32,37,115,10,0,0,119,98,0,0,70,97,105,108,101,100,32,116,111,32,111,112,101,110,58,32,37,115,58,32,37,115,10,0,0,115,116,114,0,0,44,0,0,10,0
+str0,66,97,100,32,99,111,100,101,58,32,101,120,112,101,99,116,101,100,32,39,92,39,39,32,97,116,32,37,100,44,37,100,32,98,117,116,32,103,111,116,32,39,37,99,39,10,0,0,66,97,100,32,99,111,100,101,58,32,99,104,97,114,97,99,116,101,114,32,39,37,99,39,32,97,116,32,37,100,44,37,100,32,119,97,115,32,117,110,101,120,112,101,99,116,101,100,10,0,0,66,97,100,32,99,111,100,101,58,32,110,97,109,101,32,105,115,32,116,111,111,32,108,111,110,103,32,97,116,32,37,100,44,37,100,10,0,0,105,102,0,0,101,108,115,101,0,0,119,104,105,108,101,0,0,102,111,114,0,0,101,120,116,101,114,110,0,0,103,108,111,98,97,108,0,0,114,101,116,117,114,110,0,0,98,114,101,97,107,0,0,99,111,110,116,105,110,117,101,0,0,102,108,111,97,116,0,0,100,111,117,98,108,101,0,0,97,117,116,111,0,0,66,73,82,68,83,70,65,76,76,65,80,65,82,84,0,0,66,97,100,32,99,111,100,101,58,32,99,104,97,114,97,99,116,101,114,32,39,37,99,39,32,97,116,32,37,100,44,37,100,32,119,97,115,32,117,110,101,120,112,101,99,116,101,100,10,0,0,37,99,0,0,37,99,0,0,37,115,0,0,37,122,117,0,0,37,122,117,0,0,69,120,112,101,99,116,101,100,32,116,111,107,101,110,32,39,88,88,88,39,40,37,100,41,32,97,116,32,37,100,44,37,100,32,98,117,116,32,103,111,116,32,39,88,88,88,39,40,37,100,41,10,0,0,76,69,120,112,101,99,116,101,100,32,116,111,107,101,110,32,39,88,88,88,39,40,37,100,41,32,97,116,32,37,100,44,37,100,32,98,117,116,32,103,111,116,32,39,88,88,88,39,40,37,100,41,10,0,0,73,110,118,97,108,105,100,32,104,101,120,97,100,101,99,105,109,97,108,32,100,105,103,105,116,58,32,39,92,37,99,39,32,97,116,32,37,100,44,37,100,10,0,0,73,110,118,97,108,105,100,32,104,101,120,97,100,101,99,105,109,97,108,32,100,105,103,105,116,58,32,39,92,37,99,39,32,97,116,32,37,100,44,37,100,10,0,0,73,110,118,97,108,105,100,32,101,115,99,97,112,101,32,99,111,100,101,58,32,39,92,37,99,39,32,97,116,32,37,100,44,37,100,10,0,0,9,120,102,112,0,0,10,0,0,9,120,115,116,0,0,10,0,0,85,110,114,101,97,99,104,97,98,108,101,49,32,97,116,32,108,112,114,105,109,97,114,121,58,32,37,100,44,37,100,10,0,0,70,97,105,108,101,100,32,116,111,32,102,105,110,100,32,115,121,109,98,111,108,32,39,37,115,39,32,97,116,32,37,100,44,37,100,10,0,0,9,100,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,100,97,114,10,0,0,9,108,100,99,0,0,10,0,0,9,56,100,114,10,0,0,9,108,100,99,0,0,10,0,0,9,108,100,115,0,0,10,0,0,9,109,49,48,10,0,0,9,100,114,102,10,0,0,9,100,101,99,10,0,0,9,101,114,102,10,0,0,9,109,49,48,10,0,0,9,100,114,102,10,0,0,9,105,110,99,10,0,0,9,101,114,102,10,0,0,73,110,118,97,108,105,100,32,112,114,105,109,97,114,121,32,101,120,112,114,101,115,115,105,111,110,58,32,39,88,88,88,39,40,37,100,41,32,97,116,32,37,100,44,37,100,10,0,0,9,100,114,102,10,0,0,9,115,118,50,10,0,0,9,109,50,48,10,0,0,85,110,101,120,112,101,99,116,101,100,32,105,110,116,101,103,101,114,32,97,114,103,117,109,101,110,116,32,97,102,116,101,114,32,97,32,102,112,32,97,114,103,117,109,101,110,116,32,97,116,32,37,100,44,37,100,10,0,0,9,120,102,100,10,0,0,9,115,118,48,10,0,0,9,112,117,120,0,0,9,108,100,99,0,0,9,99,97,108,0,0,9,108,100,50,10,0,0,9,109,48,120,10,0,0,9,120,100,102,10,0,0,9,109,48,120,10,0,0,9,100,114,102,10,0,0,9,110,111,116,10,0,0,9,110,101,103,10,0,0,9,108,110,116,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,97,110,100,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,111,114,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,120,111,114,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,109,117,108,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,100,105,118,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,114,101,109,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,97,100,100,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,115,117,98,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,101,113,117,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,110,101,113,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,117,98,105,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,117,98,101,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,115,104,108,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,117,97,105,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,117,97,101,10,0,0,9,115,118,48,10,0,0,9,109,49,48,10,0,0,9,108,100,48,10,0,0,9,115,104,114,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,97,100,100,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,120,48,49,10,0,0,9,115,117,98,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,120,48,49,10,0,0,9,100,105,118,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,120,48,49,10,0,0,9,114,101,109,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,97,110,100,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,115,118,49,10,0,0,9,100,114,49,10,0,0,9,111,114,10,0,0,9,108,100,49,10,0,0,9,101,114,102,10,0,0,9,109,49,48,10,0,0,9,100,114,102,10,0,0,9,108,110,116,10,0,0,9,101,114,102,10,0,0,9,115,118,48,10,0,0,9,108,100,49,10,0,0,9,56,101,114,10,0,0,9,109,49,48,10,0,0,9,100,114,102,10,0,0,9,100,101,99,10,0,0,9,101,114,102,10,0,0,9,105,110,99,10,0,0,9,109,49,48,10,0,0,9,100,114,102,10,0,0,9,105,110,99,10,0,0,9,101,114,102,10,0,0,9,100,101,99,10,0,0,9,106,108,99,0,0,9,106,108,99,0,0,108,111,99,0,0,10,0,0,9,108,106,122,0,0,108,106,112,0,0,108,111,99,0,0,10,0,0,108,111,99,0,0,10,0,0,9,108,106,122,0,0,108,111,99,0,0,10,0,0,108,106,112,0,0,108,111,99,0,0,10,0,0,9,114,101,116,10,0,0,9,108,106,122,0,0,108,106,112,0,0,108,111,99,0,0,10,0,0,108,111,99,0,0,10,0,0,103,108,98,0,0,101,120,116,0,0,69,120,112,101,99,116,101,100,32,39,40,39,44,32,39,91,39,44,32,111,114,32,39,59,39,32,97,102,116,101,114,32,83,89,77,66,79,76,32,97,102,116,101,114,32,39,101,120,116,101,114,110,39,44,32,103,111,116,32,84,79,75,69,78,40,37,100,41,32,97,116,32,37,100,58,37,100,10,0,0,114,115,119,49,42,0,0,10,0,0,114,115,119,0,0,42,0,0,10,0,0,112,114,99,0,0,10,0,0,9,109,102,115,0,0,58,0,0,10,0,0,9,97,108,99,0,0,10,0,0,9,114,101,116,10,0,0,73,110,118,97,108,105,100,32,115,116,97,116,101,109,101,110,116,58,32,39,88,88,88,39,40,37,100,41,32,97,116,32,37,100,44,37,100,10,0,0,85,115,97,103,101,58,32,37,115,32,91,45,112,112,93,32,105,110,112,117,116,45,99,111,100,101,32,111,117,116,112,117,116,45,105,114,10,0,0,45,112,112,0,0,114,98,0,0,70,97,105,108,101,100,32,116,111,32,111,112,101,110,58,32,37,115,58,32,37,115,10,0,0,119,98,0,0,70,97,105,108,101,100,32,116,111,32,111,112,101,110,58,32,37,115,58,32,37,115,10,0,0,115,116,114,0,0,44,0,0,10,0

@@ -1,11 +1,11 @@
-extern printf
-extern fprintf
-extern stderr
-extern abort
-extern realloc
-extern malloc
-extern memcpy
-extern free
+extern printf()
+extern fprintf()
+extern stderr;
+extern abort()
+extern realloc()
+extern malloc()
+extern memcpy()
+extern free()
 
 /*
    struct da {

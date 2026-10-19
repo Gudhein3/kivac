@@ -1,10 +1,13 @@
-extern printf
-extern fprintf
-extern stderr
-extern atoi
-extern sin
-extern sinf
+extern printf()
+extern fprintf()
+extern stderr;
+extern atoi()
+extern sin()
+extern sinf()
 
+extern fpAdd()
+extern fpInt2()
+extern fp2Int()
 
 fact(n)
     if n <= 0

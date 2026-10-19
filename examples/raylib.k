@@ -1,12 +1,12 @@
-extern InitWindow
-extern WindowShouldClose
-extern BeginDrawing
-extern EndDrawing
-extern ClearBackground
-extern GetMouseX
-extern GetMouseY
-extern DrawLine
-extern printf
+extern InitWindow()
+extern WindowShouldClose()
+extern BeginDrawing()
+extern EndDrawing()
+extern ClearBackground()
+extern GetMouseX()
+extern GetMouseY()
+extern DrawLine()
+extern printf()
 
 fib(x)
     if x<=1 x;
